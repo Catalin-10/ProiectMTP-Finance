@@ -1,0 +1,71 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:ProiectMTP.ViewModels"
+        x:Class="ProiectMTP.Views.BudgetWindow"
+        x:DataType="vm:MainWindowViewModel"
+        Title="Calculator &amp; Planificator Buget"
+        Width="500" Height="550"
+        WindowStartupLocation="CenterOwner"
+        Background="#111827">
+
+    <Grid RowDefinitions="Auto, *, Auto" Margin="20">
+        <StackPanel Grid.Row="0" Spacing="5" Margin="0,0,0,20">
+            <TextBlock Text="Management Buget Lunar" Foreground="#38BDF8" FontSize="18" FontWeight="Bold"/>
+            <TextBlock Text="Alocă limite și folosește calculatorul 50/30/20" Foreground="#94A3B8" FontSize="11"/>
+        </StackPanel>
+
+        <ScrollViewer Grid.Row="1">
+            <StackPanel Spacing="15">
+                <Border Background="#1E293B" Padding="15" CornerRadius="8">
+                    <StackPanel Spacing="10">
+                        <TextBlock Text="1. Calculator Automat (Introdu Venit)" Foreground="White" FontSize="13" FontWeight="SemiBold"/>
+                        <Grid ColumnDefinitions="*, Auto" Background="#334155" Height="35">
+                            <NumericUpDown Grid.Column="0" Value="{Binding IncomeInput, Mode=TwoWay}" Minimum="0" Margin="5,0"/>
+                            <Button Grid.Column="1" Content="Calculează" Command="{Binding ApplyBudgetRule}" Background="#38BDF8" Foreground="Black" Margin="5,0"/>
+                        </Grid>
+                        
+                        <Grid ColumnDefinitions="*, *, *" Margin="0,5,0,0">
+                            <StackPanel Grid.Column="0" HorizontalAlignment="Center">
+                                <TextBlock Text="50% Nevoi" Foreground="#94A3B8" FontSize="11"/>
+                                <TextBlock Text="{Binding RuleNeeds, StringFormat='{}{0:N2} lei'}" Foreground="#F87171" FontWeight="Bold"/>
+                            </StackPanel>
+                            <StackPanel Grid.Column="1" HorizontalAlignment="Center">
+                                <TextBlock Text="30% Dorințe" Foreground="#94A3B8" FontSize="11"/>
+                                <TextBlock Text="{Binding RuleWants, StringFormat='{}{0:N2} lei'}" Foreground="#FBBF24" FontWeight="Bold"/>
+                            </StackPanel>
+                            <StackPanel Grid.Column="2" HorizontalAlignment="Center">
+                                <TextBlock Text="20% Investiții" Foreground="#94A3B8" FontSize="11"/>
+                                <TextBlock Text="{Binding RuleSavings, StringFormat='{}{0:N2} lei'}" Foreground="#34D399" FontWeight="Bold"/>
+                            </StackPanel>
+                        </Grid>
+                    </StackPanel>
+                </Border>
+
+                <Border Background="#1E293B" Padding="15" CornerRadius="8">
+                    <StackPanel Spacing="12">
+                        <TextBlock Text="2. Setează Limite Manuale" Foreground="White" FontSize="13" FontWeight="SemiBold"/>
+                        
+                        <Grid ColumnDefinitions="120, *">
+                            <TextBlock Text="Mâncare (RON):" Foreground="#94A3B8" VerticalAlignment="Center"/>
+                            <NumericUpDown Grid.Column="1" Value="{Binding BudgetFood, Mode=TwoWay}" Minimum="0"/>
+                        </Grid>
+
+                        <Grid ColumnDefinitions="120, *">
+                            <TextBlock Text="Facturi (RON):" Foreground="#94A3B8" VerticalAlignment="Center"/>
+                            <NumericUpDown Grid.Column="1" Value="{Binding BudgetBills, Mode=TwoWay}" Minimum="0"/>
+                        </Grid>
+
+                        <Grid ColumnDefinitions="120, *">
+                            <TextBlock Text="Investiții (RON):" Foreground="#94A3B8" VerticalAlignment="Center"/>
+                            <NumericUpDown Grid.Column="1" Value="{Binding BudgetInvestments, Mode=TwoWay}" Minimum="0"/>
+                        </Grid>
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+        </ScrollViewer>
+
+        <Button Grid.Row="2" Content="Închide și Salvează" Click="CloseButton_Click" 
+                HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"
+                Background="#334155" Foreground="White" Padding="10" Margin="0,15,0,0"/>
+    </Grid>
+</Window>

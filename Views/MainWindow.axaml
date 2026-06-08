@@ -1,0 +1,117 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:ProiectMTP.ViewModels"
+        x:Class="ProiectMTP.Views.MainWindow"
+        x:DataType="vm:MainWindowViewModel"
+        Title="Proiect MTP - Finance Hub"
+        Width="1100" Height="750"
+        WindowStartupLocation="CenterScreen"
+        Background="#F4F6F9">
+
+    <Grid ColumnDefinitions="280, *">
+        <Border Grid.Column="0" Background="#1E293B">
+            <Grid RowDefinitions="Auto, *" Margin="20">
+                <StackPanel Grid.Row="0" Spacing="5" Margin="0,10,0,30">
+                    <TextBlock Text="Proiect MTP" Foreground="#38BDF8" FontSize="22" FontWeight="Bold"/>
+                    <TextBlock Text="Finance &amp; Stocks" Foreground="#94A3B8" FontSize="12"/>
+                </StackPanel>
+
+                <StackPanel Grid.Row="1" Spacing="15">
+                    <TextBlock Text="Adaugă Tranzacție" Foreground="White" FontSize="14" FontWeight="SemiBold"/>
+                    <TextBox PlaceholderText="Descriere" Text="{Binding NewTransDescription, Mode=TwoWay}"/>
+                    <NumericUpDown PlaceholderText="Sumă" Value="{Binding NewTransAmount, Mode=TwoWay}" Minimum="0" FormatString="0.00"/>
+                    <TextBox PlaceholderText="Categorie" Text="{Binding NewTransCategory, Mode=TwoWay}"/>
+                    <ComboBox SelectedIndex="{Binding NewTransTypeIndex, Mode=TwoWay}" HorizontalAlignment="Stretch">
+                        <ComboBoxItem Content="Venit (Income)"/>
+                        <ComboBoxItem Content="Cheltuială (Expense)"/>
+                    </ComboBox>
+                    <Button Content="Salvează Tranzacție" Command="{Binding AddTransactionAsync}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" Background="#10B981" Foreground="White"/>
+                    
+                    <Border BorderBrush="#334155" BorderThickness="0,1,0,0" Margin="0,15,0,0" Padding="0,15,0,0">
+                        <Button Content="Deschide Manager Buget" 
+                                Click="OpenBudget_Click"
+                                HorizontalAlignment="Stretch" 
+                                HorizontalContentAlignment="Center"
+                                Background="#0EA5E9" 
+                                Foreground="White" 
+                                FontWeight="Bold"/>
+                    </Border>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <ScrollViewer Grid.Column="1">
+            <StackPanel Spacing="20" Margin="20">
+              
+                <Grid ColumnDefinitions="*, *">
+                    <Border Grid.Column="0" Background="White" CornerRadius="12" Padding="20" Margin="0,0,10,0">
+                        <StackPanel Spacing="5">
+                            <TextBlock Text="Balanță Cont Local (Finanțe)" Foreground="#64748B" FontSize="13"/>
+                            <TextBlock Text="{Binding TotalBalance, StringFormat='{}{0:N2} RON'}" Foreground="#0F172A" FontSize="26" FontWeight="Bold"/>
+                        </StackPanel>
+                    </Border>
+                    <Border Grid.Column="1" Background="White" CornerRadius="12" Padding="20" Margin="10,0,0,0">
+                        <StackPanel Spacing="5">
+                            <TextBlock Text="Valoare Portofoliu Investiții" Foreground="#64748B" FontSize="13"/>
+                            <TextBlock Text="{Binding PortfolioValue, StringFormat='{}{0:N2} USD'}" Foreground="#2563EB" FontSize="26" FontWeight="Bold"/>
+                        </StackPanel>
+                    </Border>
+                </Grid>
+
+                <Border Background="White" CornerRadius="12" Padding="20">
+                    <Grid RowDefinitions="Auto, Auto, Auto">
+                        <TextBlock Grid.Row="0" Text="Analiză Evoluție &amp; Achiziție" FontSize="16" FontWeight="Bold" Foreground="#1E293B" Margin="0,0,0,15"/>
+                        <Grid Grid.Row="1" ColumnDefinitions="*, Auto, Auto, *" Margin="0,0,0,15">
+                            <TextBox Grid.Column="0" PlaceholderText="Simbol Acțiune (ex: AAPL)" Text="{Binding NewTicker}" Margin="0,0,10,0"/>
+                            <Button Grid.Column="1" Content="Afișează Trend Grafic" Command="{Binding SearchAndPreviewStockAsync}" Background="#2563EB" Foreground="White" Margin="0,0,10,0"/>
+                            <NumericUpDown Grid.Column="2" PlaceholderText="Cantitate" Value="{Binding NewQuantity}" Minimum="0" Margin="0,0,10,0" Width="120"/>
+                            <Button Grid.Column="3" Content="Cumpără Acțiuni" Command="{Binding AddStockAsync}" Background="#10B981" Foreground="White"/>
+                        </Grid>
+                        <StackPanel Grid.Row="2" Spacing="10">
+                            <TextBlock Text="{Binding GraphStatusText}" Foreground="#475569" HorizontalAlignment="Center"/>
+                            <Border BorderBrush="#E2E8F0" BorderThickness="1" CornerRadius="8" Height="160" Background="#F8FAFC" Padding="10">
+                                <Canvas Height="140" Width="500" HorizontalAlignment="Center">
+                                    <Polyline Points="{Binding ChartPoints}" Stroke="#3B82F6" StrokeThickness="3" StrokeJoin="Round"/>
+                                </Canvas>
+                            </Border>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+
+                <Border Background="White" CornerRadius="12" Padding="20">
+                    <StackPanel Spacing="10">
+                        <Grid ColumnDefinitions="*, Auto">
+                            <TextBlock Grid.Column="0" Text="Portofoliul Tău de Acțiuni" FontSize="15" FontWeight="Bold"/>
+                            <Button Grid.Column="1" Content="Update Prețuri" Command="{Binding RefreshStockPricesAsync}" Background="#475569" Foreground="White"/>
+                        </Grid>
+                        <DataGrid AutoGenerateColumns="False" ItemsSource="{Binding Stocks}" SelectedItem="{Binding SelectedStock, Mode=TwoWay}" IsReadOnly="True" GridLinesVisibility="Horizontal" Height="150">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Simbol" Binding="{Binding Ticker}" Width="*"/>
+                                <DataGridTextColumn Header="Cantitate" Binding="{Binding Quantity}" Width="*"/>
+                                <DataGridTextColumn Header="Preț Mediu" Binding="{Binding AveragePurchasePrice, Mode=OneWay, StringFormat='{}{0:N2} $'}" Width="*"/>
+                                <DataGridTextColumn Header="Preț Curent" Binding="{Binding CurrentPrice, Mode=OneWay, StringFormat='{}{0:N2} $'}" Width="*"/>
+                                <DataGridTextColumn Header="Valoare Totală" Binding="{Binding TotalValue, Mode=OneWay, StringFormat='{}{0:N2} $'}" Width="*"/>
+                                <DataGridTextColumn Header="Profit/Pierdere" Binding="{Binding ProfitLoss, Mode=OneWay, StringFormat='{}{0:N2} $'}" Width="*"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </StackPanel>
+                </Border>
+
+                <Border Background="White" CornerRadius="12" Padding="20">
+                    <StackPanel Spacing="10">
+                        <TextBlock Text="Registru Tranzacții Locale" FontSize="15" FontWeight="Bold"/>
+                        <DataGrid AutoGenerateColumns="False" ItemsSource="{Binding Transactions}" IsReadOnly="True" GridLinesVisibility="Horizontal" Height="150">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Dată" Binding="{Binding Date, Mode=OneWay, StringFormat='{}{0:dd.MM.yyyy HH:mm}'}" Width="*"/>
+                                <DataGridTextColumn Header="Categorie" Binding="{Binding Category}" Width="*"/>
+                                <DataGridTextColumn Header="Descriere" Binding="{Binding Description}" Width="*"/>
+                                <DataGridTextColumn Header="Tip" Binding="{Binding Type}" Width="*"/>
+                                <DataGridTextColumn Header="Sumă" Binding="{Binding Amount, Mode=OneWay, StringFormat='{}{0:N2} RON'}" Width="*"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</Window>
