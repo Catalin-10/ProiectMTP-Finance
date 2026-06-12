@@ -42,7 +42,6 @@
 
         <ScrollViewer Grid.Column="1">
             <StackPanel Spacing="20" Margin="20">
-              
                 <Grid ColumnDefinitions="*, *">
                     <Border Grid.Column="0" Background="White" CornerRadius="12" Padding="20" Margin="0,0,10,0">
                         <StackPanel Spacing="5">
@@ -60,20 +59,15 @@
 
                 <Border Background="White" CornerRadius="12" Padding="20">
                     <Grid RowDefinitions="Auto, Auto, Auto">
-                        <TextBlock Grid.Row="0" Text="Analiză Evoluție &amp; Achiziție" FontSize="16" FontWeight="Bold" Foreground="#1E293B" Margin="0,0,0,15"/>
+                        <TextBlock Grid.Row="0" Text="Vizualizare Preț &amp; Achiziție" FontSize="16" FontWeight="Bold" Foreground="#1E293B" Margin="0,0,0,15"/>
                         <Grid Grid.Row="1" ColumnDefinitions="*, Auto, Auto, *" Margin="0,0,0,15">
                             <TextBox Grid.Column="0" PlaceholderText="Simbol Acțiune (ex: AAPL)" Text="{Binding NewTicker}" Margin="0,0,10,0"/>
-                            <Button Grid.Column="1" Content="Afișează Trend Grafic" Command="{Binding SearchAndPreviewStockAsync}" Background="#2563EB" Foreground="White" Margin="0,0,10,0"/>
+                            <Button Grid.Column="1" Content="Caută Preț Acțiune" Command="{Binding SearchAndPreviewStockAsync}" Background="#2563EB" Foreground="White" Margin="0,0,10,0"/>
                             <NumericUpDown Grid.Column="2" PlaceholderText="Cantitate" Value="{Binding NewQuantity}" Minimum="0" Margin="0,0,10,0" Width="120"/>
                             <Button Grid.Column="3" Content="Cumpără Acțiuni" Command="{Binding AddStockAsync}" Background="#10B981" Foreground="White"/>
                         </Grid>
                         <StackPanel Grid.Row="2" Spacing="10">
                             <TextBlock Text="{Binding GraphStatusText}" Foreground="#475569" HorizontalAlignment="Center"/>
-                            <Border BorderBrush="#E2E8F0" BorderThickness="1" CornerRadius="8" Height="160" Background="#F8FAFC" Padding="10">
-                                <Canvas Height="140" Width="500" HorizontalAlignment="Center">
-                                    <Polyline Points="{Binding ChartPoints}" Stroke="#3B82F6" StrokeThickness="3" StrokeJoin="Round"/>
-                                </Canvas>
-                            </Border>
                         </StackPanel>
                     </Grid>
                 </Border>
